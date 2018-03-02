@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 
+	Asher Anand
+	Main scene UI FXML for vocabstudy
+ -->
+
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
@@ -8,25 +14,34 @@
 
 <VBox fx:controller="vocabstudy.MainPageController" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+   		
+   	  <!-- Label for text output -->
       <Label fx:id="outputtxt" alignment="CENTER" layoutX="155.0" layoutY="14.0" prefHeight="98.0" prefWidth="291.0">
          <font>
             <Font name="Calibri Light" size="25.0" />
          </font>
       </Label>
+   
+      <!-- Button to select create set -->
       <Button fx:id="createsetbtn" layoutX="234.0" layoutY="130.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="133.0">
          <font>
             <Font name="Calibri Light" size="21.0" />
          </font>
       </Button>
+   
+      <!-- Button to select edit set -->
       <Button fx:id="editsetbtn" layoutX="234.0" layoutY="210.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="133.0">
          <font>
             <Font name="Calibri Light" size="21.0" />
          </font>
       </Button>
+   
+      <!-- Button to select study set -->
       <Button fx:id="studysetbtn" layoutX="234.0" layoutY="288.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="133.0">
          <font>
             <Font name="Calibri Light" size="21.0" />
          </font>
       </Button>
+   
    </children>
 </VBox>

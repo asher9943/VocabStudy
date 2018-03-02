@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 public class CreateSetController {
 	//Class variable and UI object declaration
+	
+	//UI vars
 	@FXML
 	private Label outputtxt; 
 	
@@ -36,6 +38,7 @@ public class CreateSetController {
 	
 	private String setname; 
 	
+	//Class level vars
 	private ArrayList<Word> words = new ArrayList<Word>(); 
 	private String word; 
 	private String definition; 
@@ -54,27 +57,29 @@ public class CreateSetController {
 	public int conjunction = 6;  
 	public int interjection = 7; 
 	
-	//Sets up UI and text for all attributes
+	// Currently no purpose but to call createset
 	@FXML
 	private void initialize() {
 		createset(); 
 	}
 	
-	//Injection of mainscene object
+	// Injection of mainscene object
     public void setMainScene(Scene scene) {
         mainScene = scene;
     }
 	
-    //Begins set creation
+    // Begins set creation
 	private void createset() {
 		getsetname(); 
 	}
 	
+	// Gets the name of the set
 	private void getsetname() {
 		outputtxt.setText("Enter a name for the set");
 		inputtxt.clear(); 
 		stopbtn.setText("Exit");
 		okbtn.setText("Enter");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -82,6 +87,7 @@ public class CreateSetController {
 				getwords(); 
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -91,17 +97,20 @@ public class CreateSetController {
 		});
 	}
 	
+	// User decides whether to enter words
 	private void getwords() {
 		outputtxt.setText("Enter words?"); 
 		inputtxt.clear();
 		stopbtn.setText("No"); 
 		okbtn.setText("Yes"); 
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				getword();   
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -115,11 +124,13 @@ public class CreateSetController {
 		});
 	}
 	
+	// Gets each word
 	private void getword() {
 		outputtxt.setText("Enter the word");
 		inputtxt.clear();
 		stopbtn.setText("Exit");
 		okbtn.setText("Enter");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -127,6 +138,7 @@ public class CreateSetController {
 				getpos();  
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -140,11 +152,13 @@ public class CreateSetController {
 		});
 	}
 	
+	// Gets the part of speech
 	private void getpos() {
 		outputtxt.setText("Enter its part of speech");
 		inputtxt.clear();
 		stopbtn.setText("Exit");
 		okbtn.setText("Enter");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -174,6 +188,7 @@ public class CreateSetController {
 				getdefinition(); 
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -187,11 +202,13 @@ public class CreateSetController {
 		});
 	}
 	
+	// Gets the definition
 	private void getdefinition() {
 		outputtxt.setText("Enter the definition");
 		inputtxt.clear();
 		stopbtn.setText("Exit");
 		okbtn.setText("Enter");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -199,6 +216,7 @@ public class CreateSetController {
 				getsynonyms(); 
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -212,17 +230,20 @@ public class CreateSetController {
 		});
 	}
 	
+	// User decides to enter synonyms
 	private void getsynonyms() {
 		outputtxt.setText("Enter synonyms?");
 		inputtxt.clear();
 		stopbtn.setText("No");
 		okbtn.setText("Yes");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				getsynonym(); 
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -231,11 +252,13 @@ public class CreateSetController {
 		});
 	}
 	
+	// Gets each synonym
 	private void getsynonym() {
 		outputtxt.setText("Enter the synonym");
 		inputtxt.clear();
 		stopbtn.setText("Stop");
 		okbtn.setText("Enter");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -243,6 +266,7 @@ public class CreateSetController {
 				getsynonym(); 
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -251,17 +275,20 @@ public class CreateSetController {
 		});
 	}
 	
+	// User decides whether to enter antonyms
 	private void getantonyms() {
 		outputtxt.setText("Enter antonyms?");
 		inputtxt.clear();
 		stopbtn.setText("No");
 		okbtn.setText("Yes");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				getantonym(); 
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -270,11 +297,13 @@ public class CreateSetController {
 		});
 	}
 	
+	// Gets each antonym
 	private void getantonym() {
 		outputtxt.setText("Enter the antonym");
 		inputtxt.clear();
 		stopbtn.setText("Stop");
 		okbtn.setText("Enter");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -282,6 +311,7 @@ public class CreateSetController {
 				getantonym(); 
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -290,11 +320,13 @@ public class CreateSetController {
 		});
 	}
 	
+	// Gets the example sentence
 	private void getsentence() {
 		outputtxt.setText("Enter an example sentence");
 		inputtxt.clear();
 		stopbtn.setText("Exit");
 		okbtn.setText("Enter");
+		
 		okbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -302,6 +334,7 @@ public class CreateSetController {
 				addword(); 
 			}
 		});
+		
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -315,12 +348,14 @@ public class CreateSetController {
 		});
 	}
 	
+	// Adds the word to the arraylist of words
 	private void addword() {
 		Word wordtoadd = new Word(word, definition, pos, synonyms, antonyms, sentence); 
 		words.add(wordtoadd); 
 		getword(); 
 	}
 	
+	// Saves the words as a serialized file
 	private void saveset(int stage) throws IOException {
 		FileOutputStream fout = new FileOutputStream(setname + ".ser"); 
 		ObjectOutputStream oos = new ObjectOutputStream(fout); 

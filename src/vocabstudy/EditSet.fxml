@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- 
+	Asher Anand
+	Edit set scene UI FXML for vocabstudy
+ -->
+
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
@@ -9,10 +15,21 @@
 
 <Pane fx:controller="vocabstudy.EditSetController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+   
+	  <!-- TextArea for text output -->   
       <TextArea fx:id="outputtxt" layoutX="118.0" layoutY="14.0" prefHeight="120.0" prefWidth="364.0" />
+   
+      <!-- TextField for text input -->
       <TextField fx:id="inputtxt" layoutX="118.0" layoutY="161.0" prefHeight="25.0" prefWidth="364.0" />
+   
+      <!-- Spinner for decision making -->
       <Spinner fx:id="inputspinner" layoutX="118.0" layoutY="200.0" prefHeight="25.0" prefWidth="364.0" />
+   
+      <!-- Button to stop action -->
       <Button fx:id="stopbtn" layoutX="168.0" layoutY="255.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="101.0" text="Button" />
+   
+      <!-- Button to enter text/decision -->
       <Button fx:id="enterbtn" layoutX="334.0" layoutY="255.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="101.0" text="Button" />
+   
    </children>
 </Pane>

@@ -15,8 +15,10 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class MainPageController {
-	//Class variable and UI object declaration
-    @FXML
+	// Class variable and UI object declaration
+    
+	// UI vars
+	@FXML
     private Label outputtxt;
     
     @FXML
@@ -28,21 +30,25 @@ public class MainPageController {
     @FXML
     private Button studysetbtn; 
     
+    // Class lvl vars
     private Scene createSetScene, editSetScene, studySetScene;
 
+    // Receives create set scene 
     public void setCreateSetScene(Scene scene) {
         createSetScene = scene;
     }
     
+    // Receives edit set scene
     public void setEditSetScene(Scene scene) {
     	editSetScene = scene; 
     }
     
+    // Receives study set scene
     public void setStudySetScene(Scene scene) {
     	studySetScene = scene; 
     }
     
-    //Sets up UI and text for all attributes
+    // Sets text for all UI elements and calls for user to make choice
     @FXML
     private void initialize() {
         outputtxt.setText("What do you want to do?");
@@ -52,14 +58,14 @@ public class MainPageController {
         userchoice(); 
     }
     
-    //Switches to appropriate scene when user presses a button
+    // Switches to appropriate scene when user presses a button
     private void userchoice() {    	 
     	createsetbtn.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent event) {
     			Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
     	        primaryStage.setScene(createSetScene);
-    	        //System.out.println("Create set clicked");
+    	        // System.out.println("Create set clicked"); (for debugging)
     		}
     	});
     	
@@ -68,7 +74,7 @@ public class MainPageController {
     		public void handle(ActionEvent event) {
     			Stage primaryStage = (Stage)(outputtxt.getScene().getWindow()); 
     			primaryStage.setScene(editSetScene);
-    			//System.out.println("Edit set clicked"); 
+    			// System.out.println("Edit set clicked"); (for debugging)
     		}
     	});
     	
@@ -77,7 +83,7 @@ public class MainPageController {
     		public void handle(ActionEvent event) {
     			Stage primaryStage = (Stage)(outputtxt.getScene().getWindow()); 
     			primaryStage.setScene(studySetScene);
-    			//System.out.println("Study set clicked"); 
+    			// System.out.println("Study set clicked"); (for debugging)
     		}
     	});
     }

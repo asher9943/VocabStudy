@@ -47,6 +47,7 @@ public class EditSetController {
 	private ArrayList<String> synonyms = new ArrayList<String>(); 
 	private ArrayList<String> antonyms = new ArrayList<String>(); 
 	private int pos;
+	private boolean cont; 
 	
 	private String wordtoedit; 
 	
@@ -135,6 +136,7 @@ public class EditSetController {
 		ObservableList<String> choices =  FXCollections.observableArrayList();
 		choices.add("Add word"); 
 		choices.add("Edit word"); 
+		choices.add("Delete set"); 
 		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
 		inputValueFactory.setValue(choices.get(0));
 		inputspinner.setValueFactory(inputValueFactory); 
@@ -147,6 +149,9 @@ public class EditSetController {
 				}
 				else if (choice.equals("Edit word")) {
 					chooseword(); 
+				}
+				else if (choice.equals("Delete set")) {
+					deleteset(); 
 				}
 				else {
 					//error handling
@@ -440,67 +445,348 @@ public class EditSetController {
 		outputtxt.setText("What do you want to change the word to?");
 		enterbtn.setText("Enter");
 		stopbtn.setText("Exit");
-		ObservableList<String> choices =  FXCollections.observableArrayList();
-		for (Word word : words) {
-			choices.add(word.word);
-		}
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String newword = inputtxt.getText(); 
+				for (Word word : words) {
+					if (word.word.equals(wordtoedit)) {
+						word.word = newword; 
+					}
+				}
+			}
+		});
+	}
+	
+	private void editdefinition() {
+		outputtxt.setText("What do you want to change the word to?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit");
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String newword = inputtxt.getText(); 
+				for (Word word : words) {
+					if (word.word.equals(wordtoedit)) {
+						word.word = newword; 
+					}
+				}
+			}
+		});
+	}
+	
+	private void editsentence() {
+		outputtxt.setText("What do you want to change the word to?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit");
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String newword = inputtxt.getText(); 
+				for (Word word : words) {
+					if (word.word.equals(wordtoedit)) {
+						word.word = newword; 
+					}
+				}
+			}
+		});
+	}
+	
+	private void editpos() {
+		outputtxt.setText("What do you want to change the word to?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit");
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String newword = inputtxt.getText(); 
+				for (Word word : words) {
+					if (word.word.equals(wordtoedit)) {
+						word.word = newword; 
+					}
+				}
+			}
+		});
+	}
+	
+	private void editsynonyms() {
+		outputtxt.setText("What do you want to do to the synonyms?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit"); 
+		ObservableList<String> choices = FXCollections.observableArrayList();
+		choices.add("Add synonyms");
+		choices.add("Change synonym"); 
+		choices.add("Remove Synonym"); 
 		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
 		inputValueFactory.setValue(choices.get(0));
 		inputspinner.setValueFactory(inputValueFactory); 
 		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				wordtoedit = (String) inputspinner.getValue(); 
-				choosewordedit(); 
+				String choice = (String) inputspinner.getValue(); 
+				switch (choice) {
+				case "Add synonyms":
+					addsynonym(); 
+					break; 
+				case "Change synonym":
+					changesynonym();
+					break; 
+				case "Remove Synonym":
+					removesynonym(); 
+					break; 
+				}
 			}
 		});
 	}
 	
-	private void editdefinition() {
-		
-	}
-	
-	private void editsentence() {
-		
-	}
-	
-	private void editpos() {
-		
-	}
-	
-	private void editsynonyms() {
-		
-	}
-	
 	private void addsynonym() {
+		outputtxt.setText("Enter the synonym to add. Click stop when finished");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Stop");
+		cont = true; 
 		
+		while (cont) {
+			enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					String newsynonym = inputtxt.getText(); 
+					for (Word word : words) {
+						if (word.word.equals(wordtoedit)) {
+							word.synonyms.add(newsynonym);
+						}
+					}
+				}
+			});
+		
+			stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					cont = false; 
+				}
+			});
+		}
 	}
 	
 	private void changesynonym() {
+		outputtxt.setText("Which synonym do you want to change?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit");
+		ObservableList<String> choices = FXCollections.observableArrayList();
 		
+		for (Word word : words) {
+			if (word.word.equals(wordtoedit)) {
+				for (String synonym : word.synonyms) {
+					choices.add(synonym); 
+				}
+			}
+		}
+		
+		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
+		inputValueFactory.setValue(choices.get(0));
+		inputspinner.setValueFactory(inputValueFactory); 
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String synonymtochange = (String) inputspinner.getValue(); 
+				outputtxt.setText("What do you want to change the synonym to?");
+				enterbtn.setText("Enter");
+				stopbtn.setText("Exit");
+				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						String synonymchanged = inputtxt.getText(); 
+						for (Word word : words) {
+							if (word.word.equals(wordtoedit)) {
+								for (String synonym : word.synonyms) {
+									if (synonym.equals(synonymtochange)) {
+										synonym = synonymchanged; 
+									}
+								}
+							}
+						}
+					}
+				});
+			
+			}
+		});	
 	}
 	
 	private void removesynonym() {
+		outputtxt.setText("Which synonym do you want to change?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit");
+		ObservableList<String> choices = FXCollections.observableArrayList();
 		
+		for (Word word : words) {
+			if (word.word.equals(wordtoedit)) {
+				for (String synonym : word.synonyms) {
+					choices.add(synonym); 
+				}
+			}
+		}
+		
+		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
+		inputValueFactory.setValue(choices.get(0));
+		inputspinner.setValueFactory(inputValueFactory); 
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String synonymtoremove = (String) inputspinner.getValue(); 
+				for (Word word : words) {
+					if (word.word.equals(wordtoedit)) {
+						for (String synonym : word.synonyms) {
+							if (synonym.equals(synonymtoremove)) {
+								word.synonyms.remove(synonymtoremove);
+							}
+						}
+					}
+				}
+			}
+		});
 	}
 	
 	private void editantonyms() {
-		
+		outputtxt.setText("What do you want to do to the antonyms?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit"); 
+		ObservableList<String> choices = FXCollections.observableArrayList();
+		choices.add("Add antonyms");
+		choices.add("Change antonym"); 
+		choices.add("Remove Antonym"); 
+		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
+		inputValueFactory.setValue(choices.get(0));
+		inputspinner.setValueFactory(inputValueFactory); 
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String choice = (String) inputspinner.getValue(); 
+				switch (choice) {
+				case "Add antonym":
+					addantonym(); 
+					break; 
+				case "Change antonym":
+					changeantonym();
+					break; 
+				case "Remove Antonym":
+					removeantonym(); 
+					break; 
+				}
+			}
+		});
 	}
 	
 	private void addantonym() {
+		outputtxt.setText("Enter the antonym to add. Click stop when finished");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Stop");
+		cont = true; 
 		
+		while (cont) {
+			enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					String newantonym = inputtxt.getText(); 
+					for (Word word : words) {
+						if (word.word.equals(wordtoedit)) {
+							word.antonyms.add(newantonym);
+						}
+					}
+				}
+			});
+		
+			stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					cont = false; 
+				}
+			});
+		}
 	}
 	
 	private void changeantonym() {
+		outputtxt.setText("Which antonym do you want to change?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit");
+		ObservableList<String> choices = FXCollections.observableArrayList();
 		
+		for (Word word : words) {
+			if (word.word.equals(wordtoedit)) {
+				for (String antonym : word.antonyms) {
+					choices.add(antonym); 
+				}
+			}
+		}
+		
+		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
+		inputValueFactory.setValue(choices.get(0));
+		inputspinner.setValueFactory(inputValueFactory); 
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String antonymtochange = (String) inputspinner.getValue(); 
+				outputtxt.setText("What do you want to change the antonym to?");
+				enterbtn.setText("Enter");
+				stopbtn.setText("Exit");
+				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						String antonymchanged = inputtxt.getText(); 
+						for (Word word : words) {
+							if (word.word.equals(wordtoedit)) {
+								for (String antonym : word.antonyms) {
+									if (antonym.equals(antonymtochange)) {
+										antonym = antonymchanged; 
+									}
+								}
+							}
+						}
+					}
+				});
+			
+			}
+		});	
 	}
 	
 	private void removeantonym() {
+		outputtxt.setText("Which antonym do you want to change?");
+		enterbtn.setText("Enter");
+		stopbtn.setText("Exit");
+		ObservableList<String> choices = FXCollections.observableArrayList();
 		
+		for (Word word : words) {
+			if (word.word.equals(wordtoedit)) {
+				for (String antonym : word.antonyms) {
+					choices.add(antonym); 
+				}
+			}
+		}
+		
+		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
+		inputValueFactory.setValue(choices.get(0));
+		inputspinner.setValueFactory(inputValueFactory); 
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String antonymtoremove = (String) inputspinner.getValue(); 
+				for (Word word : words) {
+					if (word.word.equals(wordtoedit)) {
+						for (String antonym : word.antonyms) {
+							if (antonym.equals(antonymtoremove)) {
+								word.antonyms.remove(antonymtoremove);
+							}
+						}
+					}
+				}
+			}
+		});
 	}
 	
 	private void saveset(int Stage) {
 		
+	}
+	
+	private void deleteset() {
+		File filetodelete = new File(set); 
+		filetodelete.delete(); 
 	}
 }

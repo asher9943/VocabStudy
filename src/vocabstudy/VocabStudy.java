@@ -37,19 +37,20 @@ public class VocabStudy extends Application {
         MainPageController mainpagecontroller = (MainPageController) mainPaneLoader.getController();
         mainpagecontroller.setCreateSetScene(createSetScene);	
         
-        //injecting editset scene into the controller of the main scene
+        // injecting editset scene into the controller of the main scene
         mainpagecontroller.setEditSetScene(editSetScene);
         
-        //injecting mainpage scene into the controller of the create set scene
+        // injecting mainpage scene into the controller of the create set scene
         CreateSetController createsetcontroller = (CreateSetController) createSetPaneLoader.getController(); 
         createsetcontroller.setMainScene(mainScene); 
         
+        // starting main scene
         primaryStage.setTitle("VocabStudy");
         primaryStage.setScene(mainScene);
         primaryStage.show();
 	}
 	
-	//Main method, only calls start
+	// Main method, only calls start
 	public static void main(String[] args) {
 		launch(args); 
 	}
