@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+
+<Pane fx:controller="vocabstudy.StudySetController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="outputtxt" alignment="CENTER" layoutX="128.0" layoutY="14.0" prefHeight="153.0" prefWidth="345.0" />
+      <Spinner fx:id="inputspinner" layoutX="128.0" layoutY="188.0" prefHeight="25.0" prefWidth="345.0" />
+      <TextField fx:id="inputtxt" layoutX="128.0" layoutY="242.0" prefHeight="25.0" prefWidth="345.0" />
+      <Button fx:id="exitbtn" layoutX="162.0" layoutY="291.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="102.0" text="Button" />
+      <Button fx:id="enterbtn" layoutX="342.0" layoutY="291.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="102.0" text="Button" />
+   </children>
+</Pane>

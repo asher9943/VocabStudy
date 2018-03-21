@@ -33,6 +33,11 @@ public class VocabStudy extends Application {
         Parent editSetPane = editSetPaneLoader.load(); 
         Scene editSetScene = new Scene(editSetPane, 600, 400); 
         
+        // getting loader and a pane for the studyset scene
+        FXMLLoader studySetPaneLoader = new FXMLLoader(getClass().getResource("StudySet.fxml")); 
+        Parent studySetPane = studySetPaneLoader.load(); 
+        Scene studySetScene = new Scene(studySetPane, 600, 400); 
+        
         // injecting createset scene into the controller of the main scene
         MainPageController mainpagecontroller = (MainPageController) mainPaneLoader.getController();
         mainpagecontroller.setCreateSetScene(createSetScene);	
@@ -40,9 +45,8 @@ public class VocabStudy extends Application {
         // injecting editset scene into the controller of the main scene
         mainpagecontroller.setEditSetScene(editSetScene);
         
-        // injecting mainpage scene into the controller of the create set scene
-        CreateSetController createsetcontroller = (CreateSetController) createSetPaneLoader.getController(); 
-        createsetcontroller.setMainScene(mainScene); 
+        // injecting studyset scene into the controller of the main scene
+        mainpagecontroller.setStudySetScene(studySetScene); 
         
         // starting main scene
         primaryStage.setTitle("VocabStudy");

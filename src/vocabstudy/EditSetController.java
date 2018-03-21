@@ -3,8 +3,10 @@ package vocabstudy;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,11 +17,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /*
  * Asher Anand
@@ -47,7 +51,7 @@ public class EditSetController {
 	private ArrayList<String> synonyms = new ArrayList<String>(); 
 	private ArrayList<String> antonyms = new ArrayList<String>(); 
 	private int pos;
-	private boolean cont; 
+	private boolean cont;  
 	
 	private String wordtoedit; 
 	
@@ -81,6 +85,14 @@ public class EditSetController {
 		enterbtn.setText("Enter");
 		stopbtn.setText("Exit");
 		
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
+		
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".ser") && file.getName() != null) {
 				sets.add(file.getName().replaceAll(".ser", ""));
@@ -88,7 +100,7 @@ public class EditSetController {
 		}	
 		
 		if (sets.isEmpty()) {
-			outputtxt.setText("No sets found");
+			outputtxt.setText("No sets found. Press exit to exit");
 		}
 		
 		else {
@@ -153,9 +165,13 @@ public class EditSetController {
 				else if (choice.equals("Delete set")) {
 					deleteset(); 
 				}
-				else {
-					//error handling
-				}
+			}
+		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
 			}
 		});
 	}
@@ -174,7 +190,7 @@ public class EditSetController {
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				saveset(0); 
+				saveset(); 
 			}
 		});
 	}
@@ -194,7 +210,7 @@ public class EditSetController {
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				saveset(0); 
+				saveset(); 
 			}
 		});
 	}
@@ -275,6 +291,7 @@ public class EditSetController {
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				synonyms = null;
 				getantonyms(); 
 			}
 		});
@@ -314,6 +331,7 @@ public class EditSetController {
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				antonyms = null; 
 				getsentence(); 
 			}
 		});
@@ -354,27 +372,29 @@ public class EditSetController {
 		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				saveset(3); 
+				addword(3); 
 			}
 		});
 	}
 	
 	private void addword(int stage) {
-		Word wordtoadd = new Word(word, definition, pos, synonyms, antonyms, sentence); 
-		words.add(wordtoadd); 
-		getword(); 
+		Word wordtoadd = null; 
 		switch (stage) {
 		case 0: 
+			wordtoadd = new Word(word, null, -1, null, null, null); 
 			break; 
 		case 1: 
+			wordtoadd = new Word(word, null, pos, null, null, null); 
 			break;
 		case 2: 
+			wordtoadd = new Word(word, definition, pos, synonyms, antonyms, sentence); 
 			break; 
-		case 3: 
-			break; 
-		case 4: 
+		case 3:
+			wordtoadd = new Word(word, definition, pos, synonyms, antonyms, null); 
 			break; 
 		}
+		words.add(wordtoadd); 
+		getwords(); 	
 	}
 	
 	private void chooseword() {
@@ -395,6 +415,13 @@ public class EditSetController {
 				choosewordedit(); 
 			}
 		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
 		
 	}
 	
@@ -409,6 +436,7 @@ public class EditSetController {
 		choices.add("Synonyms"); 
 		choices.add("Antonyms"); 
 		choices.add("Example Sentence"); 
+		choices.add("Delete Word"); 
 		
 		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
 		inputValueFactory.setValue(choices.get(0));
@@ -436,9 +464,28 @@ public class EditSetController {
 				case "Example Sentence":
 					editsentence(); 
 					break; 
+				case "Delete Word":
+					delword(); 
+					break; 
 				}
 			}
 		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
+	}
+	
+	private void delword() {
+		for (Word word : words) {
+			if (word.word.equals(wordtoedit)) {
+				words.remove(word); 
+			}
+		}
+		saveset(); 
 	}
 	
 	private void editword() {
@@ -452,40 +499,56 @@ public class EditSetController {
 				for (Word word : words) {
 					if (word.word.equals(wordtoedit)) {
 						word.word = newword; 
+						saveset(); 
 					}
 				}
+			}
+		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
 			}
 		});
 	}
 	
 	private void editdefinition() {
-		outputtxt.setText("What do you want to change the word to?");
+		outputtxt.setText("What do you want to change the definition to?");
 		enterbtn.setText("Enter");
 		stopbtn.setText("Exit");
 		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				String newword = inputtxt.getText(); 
+				String newdefinition = inputtxt.getText(); 
 				for (Word word : words) {
 					if (word.word.equals(wordtoedit)) {
-						word.word = newword; 
+						word.definition = newdefinition; 
+						saveset(); 
 					}
 				}
+			}
+		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
 			}
 		});
 	}
 	
 	private void editsentence() {
-		outputtxt.setText("What do you want to change the word to?");
+		outputtxt.setText("What do you want to change the sentence to?");
 		enterbtn.setText("Enter");
 		stopbtn.setText("Exit");
 		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				String newword = inputtxt.getText(); 
+				String newsentence = inputtxt.getText(); 
 				for (Word word : words) {
 					if (word.word.equals(wordtoedit)) {
-						word.word = newword; 
+						word.sentence = newsentence; 
 					}
 				}
 			}
@@ -493,18 +556,48 @@ public class EditSetController {
 	}
 	
 	private void editpos() {
-		outputtxt.setText("What do you want to change the word to?");
+		outputtxt.setText("What do you want to change the part of speech to?");
 		enterbtn.setText("Enter");
 		stopbtn.setText("Exit");
 		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				String newword = inputtxt.getText(); 
+				String newpos = inputtxt.getText(); 
 				for (Word word : words) {
 					if (word.word.equals(wordtoedit)) {
-						word.word = newword; 
+						saveset(); 
+						switch (newpos) {
+						case "noun":
+							word.pos = noun;
+							break; 
+						case "verb":
+							word.pos = verb; 
+							break; 
+						case "adjective":
+							word.pos = adjective; 
+							break;
+						case "adverb":
+							word.pos = adverb; 
+							break;
+						case "preposition":
+							word.pos = preposition; 
+							break;
+						case "interjection":
+							word.pos = noun; 
+							break;
+						case "conjunction":
+							word.pos = conjunction; 
+							break;
+						}
 					}
 				}
+			}
+		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
 			}
 		});
 	}
@@ -537,14 +630,20 @@ public class EditSetController {
 				}
 			}
 		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
 	}
 	
 	private void addsynonym() {
 		outputtxt.setText("Enter the synonym to add. Click stop when finished");
 		enterbtn.setText("Enter");
 		stopbtn.setText("Stop");
-		cont = true; 
-		
+		cont = true; 	
 		while (cont) {
 			enterbtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -565,6 +664,7 @@ public class EditSetController {
 				}
 			});
 		}
+		saveset(); 
 	}
 	
 	private void changesynonym() {
@@ -600,15 +700,29 @@ public class EditSetController {
 								for (String synonym : word.synonyms) {
 									if (synonym.equals(synonymtochange)) {
 										synonym = synonymchanged; 
+										saveset(); 
 									}
 								}
 							}
 						}
 					}
 				});
-			
+				stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+						primaryStage.close();
+					}
+				});
 			}
 		});	
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
 	}
 	
 	private void removesynonym() {
@@ -637,10 +751,18 @@ public class EditSetController {
 						for (String synonym : word.synonyms) {
 							if (synonym.equals(synonymtoremove)) {
 								word.synonyms.remove(synonymtoremove);
+								saveset(); 
 							}
 						}
 					}
 				}
+			}
+		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
 			}
 		});
 	}
@@ -673,6 +795,13 @@ public class EditSetController {
 				}
 			}
 		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
 	}
 	
 	private void addantonym() {
@@ -701,6 +830,7 @@ public class EditSetController {
 				}
 			});
 		}
+		saveset(); 
 	}
 	
 	private void changeantonym() {
@@ -736,15 +866,29 @@ public class EditSetController {
 								for (String antonym : word.antonyms) {
 									if (antonym.equals(antonymtochange)) {
 										antonym = antonymchanged; 
+										saveset(); 
 									}
 								}
 							}
 						}
 					}
 				});
-			
+				stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+						primaryStage.close();
+					}
+				});
 			}
 		});	
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
 	}
 	
 	private void removeantonym() {
@@ -773,16 +917,44 @@ public class EditSetController {
 						for (String antonym : word.antonyms) {
 							if (antonym.equals(antonymtoremove)) {
 								word.antonyms.remove(antonymtoremove);
+								saveset(); 
 							}
 						}
 					}
 				}
 			}
 		});
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
 	}
 	
-	private void saveset(int Stage) {
-		
+	private void saveset() {
+		try {
+			FileOutputStream fos = new FileOutputStream(set);
+			ObjectOutputStream oos = new ObjectOutputStream(fos); 
+			oos.writeObject(words); 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		outputtxt.setText("Edit complete. Click exit to quit.");
+		enterbtn.setText("Enter"); 
+		stopbtn.setText("Exit");
+		stopbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
+				primaryStage.close();
+			}
+		});
 	}
 	
 	private void deleteset() {

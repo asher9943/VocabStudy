@@ -34,8 +34,6 @@ public class CreateSetController {
 	@FXML
 	private Button okbtn; 
 	
-	private Scene mainScene; 
-	
 	private String setname; 
 	
 	//Class level vars
@@ -63,11 +61,6 @@ public class CreateSetController {
 		createset(); 
 	}
 	
-	// Injection of mainscene object
-    public void setMainScene(Scene scene) {
-        mainScene = scene;
-    }
-	
     // Begins set creation
 	private void createset() {
 		getsetname(); 
@@ -92,7 +85,7 @@ public class CreateSetController {
 			@Override
 			public void handle(ActionEvent event) {
 				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
-    	        primaryStage.setScene(mainScene);
+    	        primaryStage.close(); 
 			}
 		});
 	}
@@ -384,7 +377,7 @@ public class CreateSetController {
 		
 		oos.close();
 		
-		outputtxt.setText("Set created. Click ok to return.");
+		outputtxt.setText("Set created. Click ok to exit.");
 		inputtxt.clear();
 		okbtn.setText("OK"); 
 		stopbtn.setVisible(false); 
@@ -393,7 +386,7 @@ public class CreateSetController {
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
-				primaryStage.setScene(mainScene); 
+				primaryStage.close(); 
 			}	
 		});
 	}
