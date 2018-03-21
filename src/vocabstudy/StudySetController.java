@@ -38,6 +38,11 @@ public class StudySetController {
 	String set; 
 	ArrayList<Word> words = new ArrayList<Word>(); 
 	
+	String studychoice; 
+	String studymethod; 
+	int termordef; 
+	int count; 
+	
 	@FXML
 	private void initialize() {
 		studyset(); 
@@ -108,6 +113,7 @@ public class StudySetController {
 	}
 	
 	private void choosestudy() {
+		outputtxt.setText("Choose what you want to study");
 		ObservableList<String> choices = FXCollections.observableArrayList();
 		choices.add("Definitions"); 
 		choices.add("Parts of Speech"); 
@@ -115,18 +121,82 @@ public class StudySetController {
 		choices.add("Antonyms"); 
 		choices.add("Example Sentences"); 
 		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
+		inputValueFactory.setValue(choices.get(0));
+		inputspinner.setValueFactory(inputValueFactory);
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				studychoice = inputValueFactory.getValue(); 
+				choosestudymethod(); 
+			}
+		});
+		exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				exit(); 
+			}
+		});
 	}
 	
 	private void choosestudymethod() {
-		
+		outputtxt.setText("Choose how to study");
+		ObservableList<String> choices = FXCollections.observableArrayList(); 
+		choices.add("Multiple Choice"); 
+		choices.add("Written"); 
+		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices);
+		inputValueFactory.setValue(choices.get(0));
+		inputspinner.setValueFactory(inputValueFactory);
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override 
+			public void handle(ActionEvent event) {
+				studymethod = inputValueFactory.getValue(); 
+				choosetermordef(); 
+			}
+		});
+		exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				exit(); 
+			}
+		});
 	}
 	
 	private void choosetermordef() {
-		
+		outputtxt.setText("Choose whether to study by each term or respond with the term");
+		ObservableList<String> choices = FXCollections.observableArrayList(); 
+		choices.add("Study by term"); 
+		choices.add("Respond with term"); 
+		choices.add("Mix of both"); 
+		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
+		inputValueFactory.setValue(choices.get(0));
+		inputspinner.setValueFactory(inputValueFactory);
+		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override 
+			public void handle(ActionEvent event) {
+				switch (inputspinner.getValue()) {
+				case "Study by term":
+					termordef = 0; 
+					break; 
+				case "Respond with term":
+					termordef = 1; 
+					break; 
+				case "Mix of both":
+					termordef = 2; 
+					break; 
+				}
+				launchstudymethod(); 
+			}
+		});
+		exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				exit(); 
+			}
+		});
 	}
 	
 	private void launchstudymethod() {
-		
+		count = 0; 
 	}
 	
 	private void exit() {
