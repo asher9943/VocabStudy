@@ -40,8 +40,18 @@ public class StudySetController {
 	
 	String studychoice; 
 	String studymethod; 
-	int termordef; 
-	int count; 
+	int count, posresponse; 
+	String response, posstring; 
+	
+	// easier reference integers for parts of speech
+	public int noun = 0; 
+	public int pronoun = 1; 
+	public int verb = 2; 
+	public int adjective = 3; 
+	public int adverb = 4; 
+	public int preposition = 5; 
+	public int conjunction = 6;  
+	public int interjection = 7; 
 	
 	@FXML
 	private void initialize() {
@@ -150,40 +160,6 @@ public class StudySetController {
 			@Override 
 			public void handle(ActionEvent event) {
 				studymethod = inputValueFactory.getValue(); 
-				choosetermordef(); 
-			}
-		});
-		exitbtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				exit(); 
-			}
-		});
-	}
-	
-	private void choosetermordef() {
-		outputtxt.setText("Choose whether to study by each term or respond with the term");
-		ObservableList<String> choices = FXCollections.observableArrayList(); 
-		choices.add("Study by term"); 
-		choices.add("Respond with term"); 
-		choices.add("Mix of both"); 
-		SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices); 
-		inputValueFactory.setValue(choices.get(0));
-		inputspinner.setValueFactory(inputValueFactory);
-		enterbtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override 
-			public void handle(ActionEvent event) {
-				switch (inputspinner.getValue()) {
-				case "Study by term":
-					termordef = 0; 
-					break; 
-				case "Respond with term":
-					termordef = 1; 
-					break; 
-				case "Mix of both":
-					termordef = 2; 
-					break; 
-				}
 				launchstudymethod(); 
 			}
 		});
@@ -197,8 +173,193 @@ public class StudySetController {
 	
 	private void launchstudymethod() {
 		count = 0; 
+		switch (studychoice) {
+		case "Definitions":
+			studydef(); 
+			break; 
+		case "Parts of Speech":
+			studypos(); 
+			break; 
+		case "Synonyms":
+			studysyn(); 
+			break; 
+		case "Antonyms":
+			studyant(); 
+			break; 
+		case "Example Sentences":
+			studysentence(); 
+			break; 
+		
+		}
 	}
 	
+	private void studydef() {
+		if (count < words.size()) {
+			if (studymethod.equals("Written")) {
+				outputtxt.setText(words.get(count).definition);
+				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override 
+					public void handle(ActionEvent Event) {
+						response = inputtxt.getText(); 
+						if (response.equals(words.get(count).word)) {
+							outputtxt.setText("Correct! Press enter to continue");
+						}
+						else {
+							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count) + "Press enter to continue");
+						}
+						enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent Event) {
+								count++; 
+								studydef(); 
+							}
+						});
+					}
+				});
+			}
+			else {
+				outputtxt.setText(words.get(count).definition);
+				ObservableList<String> choices = FXCollections.observableArrayList(); 
+				for (int i = 0; i < words.size(); i++) {
+					choices.add(words.get(i).word); 
+				}
+				SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices);
+				inputValueFactory.setValue(choices.get(0));
+				inputspinner.setValueFactory(inputValueFactory);
+				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						response = inputspinner.getValue(); 
+						if (response.equals(words.get(count).word)) {
+							outputtxt.setText("Correct! Press enter to continue");
+						}
+						else {
+							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count) + "Press enter to continue");
+						}
+						enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent Event) {
+								count++; 
+								studydef(); 
+							}
+						});
+					}
+				});
+			}
+		}
+		else {
+			outputtxt.setText("Set study finished.");
+			exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					exit(); 
+				}
+			});
+		}
+	}
+	
+	private void studypos() {
+		if (count < words.size()) {
+			if (studymethod.equals("Written")) {
+				outputtxt.setText(words.get(count).word);
+				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override 
+					public void handle(ActionEvent Event) {
+						response = inputtxt.getText(); 
+						switch (response) {
+						case "noun": 
+							posresponse = noun; 
+							break; 
+						case "pronoun":
+							posresponse = pronoun; 
+							break; 
+						case "verb":
+							posresponse = verb;
+							break; 
+						case "adjective":
+							posresponse = adjective; 
+							break; 
+						case "adverb":
+							posresponse = adverb; 
+							break; 
+						case "conjunction":
+							posresponse = conjunction; 
+							break; 
+						case "interjection":
+							posresponse = interjection; 
+							break; 
+						case "preposition":
+							posresponse = preposition; 
+							break; 
+						}
+						if (posresponse == words.get(count).pos) {
+							outputtxt.setText("Correct! Press enter to continue");
+						}
+						else {
+							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count) + "Press enter to continue");
+						}
+						enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent Event) {
+								count++; 
+								studydef(); 
+							}
+						});
+					}
+				});
+			}
+			else {
+				outputtxt.setText(words.get(count).definition);
+				ObservableList<String> choices = FXCollections.observableArrayList(); 
+				for (int i = 0; i < words.size(); i++) {
+					choices.add(words.get(i).word); 
+				}
+				SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices);
+				inputValueFactory.setValue(choices.get(0));
+				inputspinner.setValueFactory(inputValueFactory);
+				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						response = inputspinner.getValue(); 
+						if (response.equals(words.get(count).word)) {
+							outputtxt.setText("Correct! Press enter to continue");
+						}
+						else {
+							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count) + "Press enter to continue");
+						}
+						enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent Event) {
+								count++; 
+								studydef(); 
+							}
+						});
+					}
+				});
+			}
+		}
+		else {
+			outputtxt.setText("Set study finished.");
+			exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					exit(); 
+				}
+			});
+		}
+	}
+	
+	private void studysyn() {
+		
+	}
+	
+	private void studyant() {
+		
+	}
+	
+	private void studysentence() {
+		
+	}
 	private void exit() {
 		Stage primaryStage = (Stage)(outputtxt.getScene().getWindow());
 		primaryStage.close(); 
