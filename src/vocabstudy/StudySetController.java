@@ -434,11 +434,10 @@ public class StudySetController {
 	}
 	
 	private void studysyn() {
-		if (words.get(count).synonyms.size() > 0) {
 		if (count < words.size()) {
+			if (words.get(count).synonyms.size() > 0) {
 			if (studymethod.equals("Written")) {
-				System.out.println(words.get(count).synonyms.size());
-				//outputtxt.setText(words.get(count).synonyms.get(rand.nextInt(words.get(count).synonyms.size())));
+				outputtxt.setText(words.get(count).synonyms.get(rand.nextInt(words.get(count).synonyms.size())));
 				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
 					@Override 
 					public void handle(ActionEvent Event) {
@@ -447,7 +446,7 @@ public class StudySetController {
 							outputtxt.setText("Correct! Press enter to continue");
 						}
 						else {
-							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count).word + " Press enter to continue");
+							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count).word + "Press enter to continue");
 						}
 						enterbtn.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
@@ -476,7 +475,83 @@ public class StudySetController {
 							outputtxt.setText("Correct! Press enter to continue");
 						}
 						else {
-							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count).word + " Press enter to continue");
+							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count).word + "Press enter to continue");
+						}
+						enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent Event) {
+								count++; 
+								studysyn(); 
+							}
+						});
+					}
+				});
+			}
+		}
+		else {
+			outputtxt.setText("No Synonyms");
+			exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					exit(); 
+				}
+			});
+		}
+		}
+		else {
+			outputtxt.setText("Set study finished.");
+			exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					exit(); 
+				}
+			});
+		}
+	}
+	
+	private void studyant() {
+		if (count < words.size()) {
+			if (words.get(count).antonyms.size() > 0) {
+			if (studymethod.equals("Written")) {
+				outputtxt.setText(words.get(count).antonyms.get(rand.nextInt(words.get(count).antonyms.size())));
+				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override 
+					public void handle(ActionEvent Event) {
+						response = inputtxt.getText(); 
+						if (response.equals(words.get(count).word)) {
+							outputtxt.setText("Correct! Press enter to continue");
+						}
+						else {
+							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count).word + "Press enter to continue");
+						}
+						enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent Event) {
+								count++; 
+								studyant(); 
+							}
+						});
+					}
+				});
+			}
+			else {
+				outputtxt.setText(words.get(count).antonyms.get(rand.nextInt(words.get(count).antonyms.size())));
+				ObservableList<String> choices = FXCollections.observableArrayList(); 
+				for (int i = 0; i < words.size(); i++) {
+					choices.add(words.get(i).word); 
+				}
+				SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices);
+				inputValueFactory.setValue(choices.get(0));
+				inputspinner.setValueFactory(inputValueFactory);
+				enterbtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						response = inputspinner.getValue(); 
+						if (response.equals(words.get(count).word)) {
+							outputtxt.setText("Correct! Press enter to continue");
+						}
+						else {
+							outputtxt.setText("Incorrect. The correct answer was: " + words.get(count).word + "Press enter to continue");
 						}
 						enterbtn.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
@@ -490,93 +565,17 @@ public class StudySetController {
 			}
 		}
 		else {
+			outputtxt.setText("No Synonyms");
+			exitbtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					exit(); 
+				}
+			});
+		}
+		}
+		else {
 			outputtxt.setText("Set study finished.");
-			exitbtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					exit(); 
-				}
-			});
-		}
-		}
-		else {
-			outputtxt.setText("No synonyms");
-			exitbtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					exit(); 
-				}
-			});
-		}
-	}
-	
-	private void studyant() {
-		if (words.get(count).antonyms.size() > 0) {
-			if (count < words.size()) {
-				if (studymethod.equals("Written")) {
-					outputtxt.setText(words.get(count).antonyms.get(rand.nextInt(words.get(count).synonyms.size())));
-					enterbtn.setOnAction(new EventHandler<ActionEvent>() {
-						@Override 
-						public void handle(ActionEvent Event) {
-							response = inputtxt.getText(); 
-							if (response.equals(words.get(count).word)) {
-								outputtxt.setText("Correct! Press enter to continue");
-							}
-							else {
-								outputtxt.setText("Incorrect. The correct answer was: " + words.get(count).word + " Press enter to continue");
-							}
-							enterbtn.setOnAction(new EventHandler<ActionEvent>() {
-								@Override
-								public void handle(ActionEvent Event) {
-									count++; 
-									studyant(); 
-								}
-							});
-						}
-					});
-				}
-				else {
-					outputtxt.setText(words.get(count).antonyms.get(rand.nextInt(words.get(count).synonyms.size())));
-					ObservableList<String> choices = FXCollections.observableArrayList(); 
-					for (int i = 0; i < words.size(); i++) {
-						choices.add(words.get(i).word); 
-					}
-					SpinnerValueFactory<String> inputValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(choices);
-					inputValueFactory.setValue(choices.get(0));
-					inputspinner.setValueFactory(inputValueFactory);
-					enterbtn.setOnAction(new EventHandler<ActionEvent>() {
-						@Override
-						public void handle(ActionEvent event) {
-							response = inputspinner.getValue(); 
-							if (response.equals(words.get(count).word)) {
-								outputtxt.setText("Correct! Press enter to continue");
-							}
-							else {
-								outputtxt.setText("Incorrect. The correct answer was: " + words.get(count).word + " Press enter to continue");
-							}
-							enterbtn.setOnAction(new EventHandler<ActionEvent>() {
-								@Override
-								public void handle(ActionEvent Event) {
-									count++; 
-									studyant(); 
-								}
-							});
-						}
-					});
-				}
-			}
-			else {
-				outputtxt.setText("Set study finished.");
-				exitbtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						exit(); 
-					}
-				});
-			}
-		}
-		else {
-			outputtxt.setText("No antonyms");
 			exitbtn.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
